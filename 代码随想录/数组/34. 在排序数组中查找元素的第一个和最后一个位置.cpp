@@ -2,44 +2,27 @@
 
 class Solution {
 public:
+    int binarySearch(vector<int>& nums, int target, bool lower) {
+        int left = 0, right = (int)nums.size() - 1, ans = (int)nums.size();
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] > target || (lower && nums[mid] >= target)) {
+                right = mid - 1;
+                ans = mid;
+            }
+            else {
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+
     vector<int> searchRange(vector<int>& nums, int target) {
-        int upper = upperBound(nums, target);
-        int lower = lowerBound(nums, target);
-        vector<int> result;
-        if (upper < lower) {
-            upper = -1;
-            lower = -1;
+        int leftIdx = binarySearch(nums, target, true);
+        int rightIdx = binarySearch(nums, target, false) - 1;
+        if (leftIdx <= rightIdx && rightIdx < nums.size() && nums[leftIdx] == target && nums[rightIdx] == target) {
+            return vector<int>{leftIdx, rightIdx};
         }
-        result.push_back(lower);
-        result.push_back(upper);
-        return result;
-    }
-    int upperBound(vector<int>& nums, int target) {
-        int len = nums.size();
-        int left = 0, right = len - 1;
-        while (left <= right) {
-            int middle = ((right - left) >> 1) + left;
-            if (nums[middle] <= target) {
-                left = middle + 1;
-            }
-            else {
-                right = middle - 1;
-            }
-        }
-        return left - 1;
-    }
-    int lowerBound(vector<int>& nums, int target) {
-        int len = nums.size();
-        int left = 0, right = len - 1;
-        while (left <= right) {
-            int middle = ((right - left) >> 1) + left;
-            if (nums[middle] < target) {
-                left = middle + 1;
-            }
-            else {
-                right = middle - 1;
-            }
-        }
-        return right + 1;
+        return vector<int>{-1, -1};
     }
 };
