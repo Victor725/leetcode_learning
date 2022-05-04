@@ -4,7 +4,6 @@ class Solution {
 public:
     vector<int> sortedSquares(vector<int>& nums) {
         int neg = 0;
-
         if (nums[0] < 0) {
             while (neg<nums.size() && nums[neg] <= 0) {
                 neg++;
